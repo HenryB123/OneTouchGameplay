@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
 {
 
     public TextMeshProUGUI debugText;
+    public TextMeshProUGUI scoreText;
     public Slider powerSlider;
     public bool phoneIsAttached = true;
     public Transform bulletSpawn;
@@ -16,15 +17,30 @@ public class InputManager : MonoBehaviour
     public bool mouseIsDown = false;
     public float minPower = 50f, maxPower = 200;
 
+
+    public int score = 0;
+
+
+    
+
+
+
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
         debugText.text = "Input Mgr Connected!";
+        //Debug.Log(batObj.score);
     }
 
     // Update is called once per frame
     void Update()
     {
+         
+
         if(phoneIsAttached)
         {
             //use Input.touch
@@ -78,5 +94,10 @@ public class InputManager : MonoBehaviour
 
         powerSlider.value = timer;
 
+    }
+
+    public void UpdateScore(int givenScore){
+        score += givenScore;
+        scoreText.text = "Score: " + score.ToString();
     }
 }
