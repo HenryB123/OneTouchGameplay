@@ -12,28 +12,21 @@ public class InputManager : MonoBehaviour
     public Slider powerSlider;
     public bool phoneIsAttached = true;
     public Transform bulletSpawn;
+    [Tooltip("This is your gun barrel, or your tank.")]
+    public Transform gun;
     public Rigidbody2D bullet;
+    public GameObject enemyPrefab;
     public float timer = 0;
     public bool mouseIsDown = false;
     public float minPower = 50f, maxPower = 200;
-
-
     public int score = 0;
-
-
-    
-
-
-
-
-
-
+    [Tooltip("The X and Y min and max spawn positions for enemies.")]
+    public Vector2 min, max;
 
     // Start is called before the first frame update
     void Start()
     {
-        debugText.text = "Input Mgr Connected!";
-        //Debug.Log(batObj.score);
+        
     }
 
     // Update is called once per frame
@@ -80,7 +73,7 @@ public class InputManager : MonoBehaviour
             }
         }
     }
-    void Shoot()
+    public void Shoot()
     {
         // add a ceiling to the timer's max amount.
         if(timer > maxPower) timer = maxPower;
@@ -91,7 +84,6 @@ public class InputManager : MonoBehaviour
         rb.AddRelativeForce(Vector2.up * 10 * timer);
 
         timer = minPower;   //reset timer
-
         powerSlider.value = timer;
 
     }
@@ -99,5 +91,22 @@ public class InputManager : MonoBehaviour
     public void UpdateScore(int givenScore){
         score += givenScore;
         scoreText.text = "Score: " + score.ToString();
+    }
+
+    public void RotateGun(int dir)
+    {
+        gun.transform.Rotate(0, 0, dir * 15);
+    }
+
+    public void SpawnEnemy()
+    {
+        // the for loop has the counter built in.
+        int totalEnemies = Random.Range(4, 9);
+        for(int i = 0; i < totalEnemies; i += 1)
+        {
+            GameObject newEnemy = Instantiate(enemyPrefab);
+            newEnemy.transform.position = new Vector2(Random.Range(min.x, max.x), Random.Range(min.y, max.y));
+        }
+        
     }
 }
