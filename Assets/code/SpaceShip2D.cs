@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class SpaceShip2D : MonoBehaviour
 {
@@ -18,6 +21,10 @@ public class SpaceShip2D : MonoBehaviour
     public GameObject youWin;
     public GameObject youLose;
 
+    private AudioSource deathAudio;
+
+    public Slider healthSlider;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +33,8 @@ public class SpaceShip2D : MonoBehaviour
         youWin.SetActive(false);
         youLose.SetActive(false);
         Load();
+
+        deathAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -61,8 +70,12 @@ public class SpaceShip2D : MonoBehaviour
         {
             Debug.Log("You Lose");
             youLose.SetActive(true);
-            Time.timeScale = 0;
+            deathAudio.Play();
+            Reset();
+            StartCoroutine(deathRespawn());
         }
+
+        healthSlider.value = health;
     }
 
     void FixedUpdate()
@@ -129,5 +142,12 @@ public class SpaceShip2D : MonoBehaviour
     public void UpdateTurnDirection(int direction)
     {
         turnDirection = direction;
+    }
+
+    IEnumerator deathRespawn()
+    {
+        Debug.Log("deathRespawn");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
